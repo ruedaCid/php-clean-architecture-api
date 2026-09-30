@@ -17,6 +17,8 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 RUN groupmod -g ${GID} www-data \
     && usermod -u ${UID} -g ${GID} www-data
 
+ENV COMPOSER_HOME=/tmp/composer
+
 WORKDIR /var/www/html
 
 USER www-data
