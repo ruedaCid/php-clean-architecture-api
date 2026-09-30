@@ -1,5 +1,7 @@
 # PHP Clean Architecture API
 
+[![Tests](https://github.com/ruedaCid/php-clean-architecture-api/actions/workflows/tests.yml/badge.svg)](https://github.com/ruedaCid/php-clean-architecture-api/actions/workflows/tests.yml)
+
 A production-inspired REST API built with **PHP 8.4 and Laravel**, designed to demonstrate how Clean Architecture principles can be applied while keeping the core business logic independent from the framework, persistence layer and HTTP transport.
 
 This repository is intentionally small. Its purpose is not to showcase a large CRUD application, but to demonstrate architectural boundaries, dependency inversion, testability and pragmatic backend design.
