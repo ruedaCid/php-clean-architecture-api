@@ -78,4 +78,42 @@ final class CustomerApiTest extends TestCase
                 'email',
             ]);
     }
+
+     public function test_it_returns_a_customer_by_id(): void
+{
+    $repository = app(CustomerRepository::class);
+
+    $repository->save(
+        new Customer(
+            new CustomerId('customer-123'),
+            'John Smith',
+            new Email('john@example.com')
+        )
+    );
+
+    $response = $this->getJson('/api/customers/customer-123');
+
+    $response
+        ->assertOk()
+        ->assertJson([
+            'data' => [
+                'id' => 'customer-123',
+                'name' => 'John Smith',
+                'email' => 'john@example.com',
+            ],
+        ]);
+}
+
+public function test_it_returns_not_found_for_an_unknown_customer(): void
+{
+    $response = $this->getJson(
+        '/api/customers/customer-999'
+    );
+
+    $response
+        ->assertNotFound()
+        ->assertJson([
+            'message' => 'Customer with ID "customer-999" was not found.',
+        ]);
+}
 }

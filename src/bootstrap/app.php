@@ -1,5 +1,8 @@
 <?php
 
+use App\Application\Customer\CreateCustomer\CustomerAlreadyExists;
+use App\Application\Customer\GetCustomer\CustomerNotFound;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -16,7 +19,24 @@ return Application::configure(basePath: dirname(__DIR__))
         //
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        $exceptions->shouldRenderJsonWhen(
-            fn (Request $request) => $request->is('api/*') || $request->expectsJson(),
-        );
-    })->create();
+    $exceptions->shouldRenderJsonWhen(
+        fn (Request $request) => $request->is('api/*') || $request->expectsJson(),
+    );
+
+    $exceptions->render(
+        function (CustomerAlreadyExists $exception): JsonResponse {
+            return response()->json([
+                'message' => $exception->getMessage(),
+            ], 409);
+        }
+    );
+
+    $exceptions->render(
+        function (CustomerNotFound $exception): JsonResponse {
+            return response()->json([
+                'message' => $exception->getMessage(),
+            ], 404);
+        }
+    );
+})
+->create();

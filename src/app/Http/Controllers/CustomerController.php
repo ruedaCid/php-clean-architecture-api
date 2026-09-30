@@ -10,6 +10,7 @@ use App\Application\Customer\CreateCustomer\CustomerAlreadyExists;
 use App\Http\Requests\CreateCustomerRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Str;
+use App\Application\Customer\GetCustomer\GetCustomerHandler;
 
 final class CustomerController extends Controller
 {
@@ -39,4 +40,18 @@ final class CustomerController extends Controller
             ],
         ], 201);
     }
+public function show(
+    string $id,
+    GetCustomerHandler $handler
+): JsonResponse {
+    $customer = $handler->handle($id);
+
+    return response()->json([
+        'data' => [
+            'id' => $customer->id()->value(),
+            'name' => $customer->name(),
+            'email' => $customer->email()->value(),
+        ],
+    ]);
+}
 }
